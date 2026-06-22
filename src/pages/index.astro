@@ -1,17 +1,89 @@
 ---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
+const posts = (await getCollection('blog'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const featured = posts.slice(0, 3);
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].slice(0, 12);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout description="Air Chika 是一个偏柔和二次元气质的个人博客，收纳随笔、收藏、笔记与安静的夜晚。">
+  <main>
+    <section class="hero">
+      <div class="hero-media" aria-hidden="true">
+        <img src="/hero-air-chika.png" alt="" />
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">琥珀色的私人角落</p>
+        <h1>Air Chika</h1>
+        <p class="lead">
+          写一点动画、视觉小说、日常收藏与个人笔记。像深夜茶室里亮着的一盏灯，慢慢整理喜欢的东西。
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="/blog/">读文章</a>
+          <a class="button secondary" href="/about/">关于我</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell intro-grid" aria-label="站点概览">
+      <article class="profile-card">
+        <p class="section-kicker">Profile</p>
+        <h2>偏爱琥珀色、月光与温柔的叙事。</h2>
+        <p>
+          这里先不把自己写成简历。Air Chika 更像一个收藏夹：文章、截图灵感、作品感想、偶尔的技术笔记。
+        </p>
+        <div class="stats" aria-label="站点统计">
+          <span>{posts.length} 篇文章</span>
+          <span>{tags.length} 个标签</span>
+          <span id="site-uptime">运行中</span>
+        </div>
+      </article>
+
+      <aside class="tag-cloud" aria-label="标签云">
+        <p class="section-kicker">Tags</p>
+        <div>
+          {tags.map((tag) => <a href={`/blog/?tag=${encodeURIComponent(tag)}`}>#{tag}</a>)}
+        </div>
+      </aside>
+    </section>
+
+    <section class="shell">
+      <div class="section-heading">
+        <p class="section-kicker">Recent</p>
+        <h2>最近文章</h2>
+        <a href="/blog/">全部文章</a>
+      </div>
+      <div class="card-grid">
+        {featured.map((post) => (
+          <a class="post-card" href={`/blog/${post.id}/`}>
+            <p>{post.data.pubDate.toLocaleDateString('zh-CN')}</p>
+            <h3>{post.data.title}</h3>
+            <span>{post.data.description}</span>
+            <div class="tags">
+              {post.data.tags.slice(0, 3).map((tag) => <small>{tag}</small>)}
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="shell note-band">
+      <p class="section-kicker">Lightweight First</p>
+      <h2>首版先保持轻量。</h2>
+      <p>
+        搜索、评论和统计会先保留接口位置。等内容数量上来之后，再接 Pagefind、giscus 或其他静态站友好的服务。
+      </p>
+    </section>
+  </main>
+
+  <script is:inline>
+    const startedAt = new Date('2026-06-22T00:00:00+08:00');
+    const days = Math.max(0, Math.floor((Date.now() - startedAt.getTime()) / 86400000));
+    const node = document.getElementById('site-uptime');
+    if (node) node.textContent = `运行 ${days} 天`;
+  </script>
+</BaseLayout>

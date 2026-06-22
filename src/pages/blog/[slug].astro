@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <main class="shell page article-page">
+    <article class="prose-panel">
+      <p class="section-kicker">Article</p>
+      <h1>{post.data.title}</h1>
+      <p class="article-meta">{post.data.pubDate.toLocaleDateString('zh-CN')}</p>
+      <div class="tags">
+        {post.data.tags.map((tag) => <small>{tag}</small>)}
+      </div>
+      <Content />
+    </article>
+
+    <section class="comments-placeholder">
+      <h2>评论</h2>
+      <p>这里预留给 giscus。等仓库和 Discussions 配好之后再接入。</p>
+    </section>
+  </main>
+</BaseLayout>

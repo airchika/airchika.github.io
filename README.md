@@ -1,43 +1,45 @@
-# Astro Starter Kit: Minimal
+# Air Chika
+
+Astro 静态个人站。首版定位是柔和二次元气质的个人博客，包含首页、关于页、文章列表、文章详情、标签入口、站点运行天数和 GitHub Pages 部署工作流。
+
+## 本地开发
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 构建
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm run build
+npm run preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 写文章
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+文章放在 `content/blog`。每篇 Markdown 需要 frontmatter：
 
-Any static assets, like images, can be placed in the `public/` directory.
+```md
+---
+title: 文章标题
+description: 简短描述
+pubDate: 2026-06-22
+tags: [随笔, 视觉小说]
+draft: false
+---
+```
 
-## 🧞 Commands
+## GitHub Pages
 
-All commands are run from the root of the project, from a terminal:
+这个项目按“用户站”配置，不设置 `base`。仓库名应为 `<你的 GitHub 用户名>.github.io`。
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+部署前建议在仓库 `Settings > Secrets and variables > Actions > Variables` 里添加：
 
-## 👀 Want to learn more?
+```txt
+SITE_URL=https://<你的 GitHub 用户名>.github.io
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+然后到 `Settings > Pages` 把 Source 设为 `GitHub Actions`。推送到 `main` 后，`.github/workflows/deploy.yml` 会自动构建并发布。
+
+如果使用自定义域名，把 `SITE_URL` 设置为自定义域，并同步修改 `public/robots.txt` 里的 sitemap 地址。
