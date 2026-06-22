@@ -39,10 +39,41 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      try {
+        const storedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      } catch {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
   </head>
   <body>
     <Header />
     <slot />
     <Footer />
+    <script is:inline>
+      const button = document.querySelector('[data-theme-toggle]');
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const applyTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]')?.setAttribute(
+          'content',
+          theme === 'dark' ? '#171310' : '#b77935',
+        );
+      };
+
+      applyTheme(document.documentElement.dataset.theme || (media.matches ? 'dark' : 'light'));
+
+      button?.addEventListener('click', () => {
+        const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        try {
+          localStorage.setItem('theme', next);
+        } catch {}
+        applyTheme(next);
+      });
+    </script>
   </body>
 </html>

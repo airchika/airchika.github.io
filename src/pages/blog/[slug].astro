@@ -9,6 +9,8 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const published = post.data.pubDate.toLocaleDateString('zh-CN');
+const updated = post.data.updatedDate?.toLocaleDateString('zh-CN');
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
@@ -16,7 +18,15 @@ const { Content } = await render(post);
     <article class="prose-panel">
       <p class="section-kicker">Article</p>
       <h1>{post.data.title}</h1>
-      <p class="article-meta">{post.data.pubDate.toLocaleDateString('zh-CN')}</p>
+      <p class="article-meta">
+        发布于 <time datetime={post.data.pubDate.toISOString()}>{published}</time>
+        {updated && (
+          <>
+            <span aria-hidden="true"> · </span>
+            更新于 <time datetime={post.data.updatedDate?.toISOString()}>{updated}</time>
+          </>
+        )}
+      </p>
       <div class="tags">
         {post.data.tags.map((tag) => <small>{tag}</small>)}
       </div>

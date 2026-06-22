@@ -10,21 +10,26 @@ const featured = posts.slice(0, 3);
 const tags = [...new Set(posts.flatMap((post) => post.data.tags))].slice(0, 12);
 ---
 
-<BaseLayout description="Air Chika 是一个偏柔和二次元气质的个人博客，收纳随笔、收藏、笔记与安静的夜晚。">
+<BaseLayout description="Air Chika 是一个偏柔和二次元气质的个人博客，收纳随笔、收藏、笔记。">
   <main>
     <section class="hero">
       <div class="hero-media" aria-hidden="true">
         <img src="/hero-air-chika.png" alt="" />
       </div>
       <div class="hero-copy">
-        <p class="eyebrow">琥珀色的私人角落</p>
+        <p class="eyebrow">KOHAKU</p>
         <h1>Air Chika</h1>
         <p class="lead">
-          写一点动画、视觉小说、日常收藏与个人笔记。像深夜茶室里亮着的一盏灯，慢慢整理喜欢的东西。
+          还没想好写点什么。。。可能是动画、学习。
         </p>
         <div class="hero-actions">
           <a class="button" href="/blog/">读文章</a>
           <a class="button secondary" href="/about/">关于我</a>
+        </div>
+        <div class="mood-strip" aria-label="站点气质">
+          <span>空气</span>
+          <span>琥珀</span>
+          <span>镝木七花</span>
         </div>
       </div>
     </section>
@@ -32,9 +37,9 @@ const tags = [...new Set(posts.flatMap((post) => post.data.tags))].slice(0, 12);
     <section class="shell intro-grid" aria-label="站点概览">
       <article class="profile-card">
         <p class="section-kicker">Profile</p>
-        <h2>偏爱琥珀色、月光与温柔的叙事。</h2>
+        <h2>カブラギ</h2>
         <p>
-          这里先不把自己写成简历。Air Chika 更像一个收藏夹：文章、截图灵感、作品感想、偶尔的技术笔记。
+          本站基于 CODEX 托管，所以...
         </p>
         <div class="stats" aria-label="站点统计">
           <span>{posts.length} 篇文章</span>
